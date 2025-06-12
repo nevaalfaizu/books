@@ -1,24 +1,26 @@
+import 'package:books/providers/book_provider.dart';
+import 'package:books/screens/books/book_table.dart';
 import 'package:flutter/material.dart';
-import 'book_form.dart';
-import 'book_table.dart';
+import 'package:provider/provider.dart';
+
+void main() {
+  runApp(
+    MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => BookProvider())],
+      child: const BookContent(),
+    ),
+  );
+}
 
 class BookContent extends StatelessWidget {
   const BookContent({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Manajemen Buku")),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: const [
-            // BookForm(),
-            SizedBox(height: 16),
-            Expanded(child: BookTable()),
-          ],
-        ),
-      ),
+    return MaterialApp(
+      title: 'Book Manager',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: BookTablePage(),
     );
   }
 }
