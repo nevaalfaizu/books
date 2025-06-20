@@ -1,25 +1,25 @@
-import 'package:books/models/books_model.dart';
+import 'package:books/models/inventory_model.dart';
 import 'package:books/models/category_model.dart';
-import 'package:books/services/book_service.dart';
-
+import 'package:books/services/inventory_service.dart';
 import 'package:books/services/category_service.dart';
 import 'package:flutter/material.dart';
 
-class BookForm extends StatefulWidget {
-  final bool addBook;
-  final Book? book;
+class InventoryForm extends StatefulWidget {
+  final bool addInventory;
+  final Inventory? inventory;
 
-  const BookForm({Key? key, required this.addBook, this.book})
+  const InventoryForm({Key? key, required this.addInventory, this.inventory})
     : super(key: key);
 
   @override
-  State<BookForm> createState() => _BookFormPageState();
+  State<InventoryForm> createState() => _InventoryFormPageState();
 }
 
-class _BookFormPageState extends State<BookForm> {
+class _InventoryFormPageState extends State<InventoryForm> {
   final _formKey = GlobalKey<FormState>();
-  late TextEditingController _titleController;
-  late TextEditingController _authorController;
+  late TextEditingController _nameController;
+  late TextEditingController _quantityController;
+  late TextEditingController _priceController;
   late TextEditingController _yearController;
 
   List<Category> _categories = [];
@@ -29,10 +29,16 @@ class _BookFormPageState extends State<BookForm> {
   void initState() {
     super.initState();
 
-    _titleController = TextEditingController(text: widget.book?.title ?? '');
-    _authorController = TextEditingController(text: widget.book?.author ?? '');
+    _nameController = TextEditingController(text: widget.inventory?.name ?? '');
+    _quantityController = TextEditingController(
+      text: widget.inventory?.quantity.toString() ?? '',
+    );
+    _priceController = TextEditingController(
+      text: widget.inventory?.price.toString() ?? '',
+    );
+
     _yearController = TextEditingController(
-      text: widget.book?.year.toString() ?? '',
+      text: widget.inventory?.year.toString() ?? '',
     );
 
     _fetchCategories();
@@ -44,9 +50,9 @@ class _BookFormPageState extends State<BookForm> {
       _categories = categories;
 
       // Set selected category for edit form
-      if (widget.book != null) {
+      if (widget.inventory != null) {
         _selectedCategory = _categories.firstWhere(
-          (c) => c.id == widget.book!.category.id,
+          (c) => c.id == widget.inventory!.category.id,
           orElse: () => _categories.first,
         );
       } else {
@@ -57,20 +63,22 @@ class _BookFormPageState extends State<BookForm> {
 
   Future<void> _submitForm() async {
     try {
-      if (widget.book == null) {
+      if (widget.inventory == null) {
         // Tambah buku
-        await BookService.createBook(
-          title: _titleController.text,
-          author: _authorController.text,
-          year: int.parse(_yearController.text),
+        await InventoryService.createInventory(
+          name: _nameController.text,
+          quantity: int.parse(_yearController.text),
+          price: int.parse(_quantityController.text),
+          year: int.parse(_priceController.text),
           categoryId: _selectedCategory!.id,
         );
       } else {
         // Update buku
-        await BookService.updateBook(
-          id: widget.book!.id,
-          title: _titleController.text,
-          author: _authorController.text,
+        await InventoryService.updateInventory(
+          id: widget.inventory!.id,
+          name: _nameController.text,
+          quantity: int.parse(_quantityController.text),
+          price: int.parse(_priceController.text),
           year: int.parse(_yearController.text),
           categoryId: _selectedCategory!.id,
         );
@@ -90,7 +98,9 @@ class _BookFormPageState extends State<BookForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.book == null ? 'Tambah Buku' : 'Edit Buku'),
+        title: Text(
+          widget.inventory == null ? 'Tambah Inventory' : 'Edit Inventory',
+        ),
       ),
       body:
           _categories.isEmpty
@@ -102,21 +112,34 @@ class _BookFormPageState extends State<BookForm> {
                   child: ListView(
                     children: [
                       TextFormField(
-                        controller: _titleController,
-                        decoration: const InputDecoration(labelText: 'Judul'),
+                        controller: _nameController,
+                        decoration: const InputDecoration(labelText: 'Nama'),
                         validator:
                             (value) =>
                                 value!.isEmpty
-                                    ? 'Judul tidak boleh kosong'
+                                    ? 'Nama tidak boleh kosong'
                                     : null,
                       ),
                       TextFormField(
-                        controller: _authorController,
-                        decoration: const InputDecoration(labelText: 'Penulis'),
+                        controller: _quantityController,
+                        decoration: const InputDecoration(
+                          labelText: 'Kuantitas',
+                        ),
+                        keyboardType: TextInputType.number,
                         validator:
                             (value) =>
                                 value!.isEmpty
-                                    ? 'Penulis tidak boleh kosong'
+                                    ? 'quantity tidak boleh kosong'
+                                    : null,
+                      ),
+                      TextFormField(
+                        controller: _priceController,
+                        decoration: const InputDecoration(labelText: 'Harga'),
+                        keyboardType: TextInputType.number,
+                        validator:
+                            (value) =>
+                                value!.isEmpty
+                                    ? 'Harga tidak boleh kosong'
                                     : null,
                       ),
                       TextFormField(
@@ -152,7 +175,9 @@ class _BookFormPageState extends State<BookForm> {
                       const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: _submitForm,
-                        child: Text(widget.book == null ? 'Tambah' : 'Simpan'),
+                        child: Text(
+                          widget.inventory == null ? 'Tambah' : 'Simpan',
+                        ),
                       ),
                     ],
                   ),

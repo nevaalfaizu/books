@@ -1,16 +1,17 @@
-import 'package:books/providers/book_provider.dart';
-import 'package:books/screens/books/book_form.dart';
+// category_table.dart
+import 'package:books/providers/category_provider.dart';
+import 'package:books/screens/categories/category_form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class BookTablePage extends StatefulWidget {
-  const BookTablePage({super.key});
+class CategoryTablePage extends StatefulWidget {
+  const CategoryTablePage({super.key});
 
   @override
-  State<BookTablePage> createState() => _BookTablePageState();
+  State<CategoryTablePage> createState() => _CategoryTablePageState();
 }
 
-class _BookTablePageState extends State<BookTablePage> {
+class _CategoryTablePageState extends State<CategoryTablePage> {
   final TextEditingController _searchController = TextEditingController();
   int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
 
@@ -18,14 +19,13 @@ class _BookTablePageState extends State<BookTablePage> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      Provider.of<BookProvider>(context, listen: false).fetchBooks();
+      Provider.of<CategoryProvider>(context, listen: false).fetchCategories();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<BookProvider>(context);
-    // Removed incorrect showDialog call on BookProvider.
+    final provider = Provider.of<CategoryProvider>(context);
 
     return Scaffold(
       body: Padding(
@@ -38,22 +38,18 @@ class _BookTablePageState extends State<BookTablePage> {
                 : Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Top toolbar: Search and Add
                     Row(
                       children: [
                         Expanded(
                           child: TextField(
                             controller: _searchController,
                             decoration: InputDecoration(
-                              hintText: 'Cari judul atau penulis...',
+                              hintText: 'Cari nama kategori...',
                               prefixIcon: const Icon(Icons.search),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                            onChanged: (value) {
-                              // Implement search if needed
-                            },
                           ),
                         ),
                         const SizedBox(width: 16),
@@ -62,15 +58,16 @@ class _BookTablePageState extends State<BookTablePage> {
                             final result = await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => const BookForm(addBook: true),
+                                builder:
+                                    (_) =>
+                                        const CategoryForm(addCategory: true),
                               ),
                             );
                             if (result == true) {
-                              // Ambil ulang data dari API
-                              Provider.of<BookProvider>(
+                              Provider.of<CategoryProvider>(
                                 context,
                                 listen: false,
-                              ).fetchBooks();
+                              ).fetchCategories();
                             }
                           },
                           icon: const Icon(Icons.add),
@@ -79,15 +76,13 @@ class _BookTablePageState extends State<BookTablePage> {
                       ],
                     ),
                     const SizedBox(height: 16),
-
-                    // Full-width scrollable table with pagination
                     Expanded(
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width,
                           child: PaginatedDataTable(
-                            header: const Text("Data Buku"),
+                            header: const Text("Data Kategori"),
                             rowsPerPage: _rowsPerPage,
                             onRowsPerPageChanged: (value) {
                               setState(() {
@@ -96,14 +91,12 @@ class _BookTablePageState extends State<BookTablePage> {
                             },
                             columns: const [
                               DataColumn(label: Text("NO")),
-                              DataColumn(label: Text("Judul")),
-                              DataColumn(label: Text("Penulis")),
-                              DataColumn(label: Text("Tahun")),
-                              DataColumn(label: Text("Kategori")),
+                              DataColumn(label: Text("Nama")),
+                              DataColumn(label: Text("Deskripsi")),
                               DataColumn(label: Text("Aksi")),
                             ],
-                            source: _BookDataTableSource(
-                              provider.books,
+                            source: _CategoryDataTableSource(
+                              provider.categories,
                               context,
                             ),
                           ),
@@ -117,48 +110,43 @@ class _BookTablePageState extends State<BookTablePage> {
   }
 }
 
-class _BookDataTableSource extends DataTableSource {
-  final List books;
+class _CategoryDataTableSource extends DataTableSource {
+  final List categories;
   final BuildContext context;
 
-  _BookDataTableSource(this.books, this.context);
+  _CategoryDataTableSource(this.categories, this.context);
 
   @override
   DataRow getRow(int index) {
-    if (index >= books.length) return const DataRow(cells: []);
-
-    final book = books[index];
+    if (index >= categories.length) return const DataRow(cells: []);
+    final category = categories[index];
 
     return DataRow(
       cells: [
         DataCell(Text((index + 1).toString())),
-        DataCell(Text(book.title)),
-        DataCell(Text(book.author)),
-        DataCell(Text(book.year.toString())),
-        DataCell(Text(book.category.name)),
+        DataCell(Text(category.name)),
+        DataCell(Text(category.description)),
         DataCell(
           Row(
             children: [
-              IconButton(
-                icon: const Icon(Icons.visibility),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/book/${book.id}');
-                },
-              ),
               IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () async {
                   final result = await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => BookForm(book: book, addBook: false),
+                      builder:
+                          (_) => CategoryForm(
+                            category: category,
+                            addCategory: false,
+                          ),
                     ),
                   );
                   if (result == true) {
-                    Provider.of<BookProvider>(
+                    Provider.of<CategoryProvider>(
                       context,
                       listen: false,
-                    ).fetchBooks();
+                    ).fetchCategories();
                   }
                 },
               ),
@@ -171,7 +159,7 @@ class _BookDataTableSource extends DataTableSource {
                         (context) => AlertDialog(
                           title: const Text("Konfirmasi Hapus"),
                           content: Text(
-                            "Yakin ingin menghapus buku '${book.title}'?",
+                            "Yakin ingin menghapus buku '${category.name}'?",
                           ),
                           actions: [
                             TextButton(
@@ -187,10 +175,10 @@ class _BookDataTableSource extends DataTableSource {
                   );
 
                   if (confirm == true) {
-                    await Provider.of<BookProvider>(
+                    await Provider.of<CategoryProvider>(
                       context,
                       listen: false,
-                    ).deleteBook(book.id);
+                    ).deleteCategory(category.id);
                   }
                 },
               ),
@@ -205,8 +193,10 @@ class _BookDataTableSource extends DataTableSource {
   bool get isRowCountApproximate => false;
 
   @override
-  int get rowCount => books.length;
+  int get rowCount => categories.length;
 
   @override
   int get selectedRowCount => 0;
 }
+
+// inventory_table.dart (struktur hampir sama dengan category_table.dart, ganti model, provider dan form sesuai kebutuhan)
