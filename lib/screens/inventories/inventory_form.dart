@@ -8,8 +8,7 @@ class InventoryForm extends StatefulWidget {
   final bool addInventory;
   final Inventory? inventory;
 
-  const InventoryForm({Key? key, required this.addInventory, this.inventory})
-    : super(key: key);
+  const InventoryForm({super.key, required this.addInventory, this.inventory});
 
   @override
   State<InventoryForm> createState() => _InventoryFormPageState();

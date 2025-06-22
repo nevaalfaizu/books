@@ -1,3 +1,4 @@
+// import 'package:books/models/stat_model.dart';
 import 'package:flutter/material.dart';
 import '../models/books_model.dart';
 import '../services/book_service.dart';
@@ -10,6 +11,9 @@ class BookProvider with ChangeNotifier {
   List<Book> get books => _books;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
+
+  // final List<StatDaily> _stats = [];
+  // List<StatDaily> get stats => _stats;
 
   Future<void> fetchBooks() async {
     _isLoading = true;
@@ -91,4 +95,13 @@ class BookProvider with ChangeNotifier {
       return null;
     }
   }
+
+  // Future<void> fetchBookStats() async {
+  //   try {
+  //     _stats = await BookService.getStats();
+  //     notifyListeners();
+  //   } catch (e) {
+  //     print('Error fetching book stats: $e');
+  //   }
+  // }
 }

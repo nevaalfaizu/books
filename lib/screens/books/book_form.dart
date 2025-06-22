@@ -9,8 +9,7 @@ class BookForm extends StatefulWidget {
   final bool addBook;
   final Book? book;
 
-  const BookForm({Key? key, required this.addBook, this.book})
-    : super(key: key);
+  const BookForm({super.key, required this.addBook, this.book});
 
   @override
   State<BookForm> createState() => _BookFormPageState();

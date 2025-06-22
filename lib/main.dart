@@ -1,7 +1,8 @@
 import 'package:books/providers/book_provider.dart';
 import 'package:books/providers/category_provider.dart';
 import 'package:books/providers/inventory_provider.dart';
-import 'package:books/screens/books/book_content.dart';
+import 'package:books/providers/stat_provider.dart';
+import 'package:books/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,13 +22,14 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => BookProvider()),
         ChangeNotifierProvider(create: (_) => CategoryProvider()),
         ChangeNotifierProvider(create: (_) => InventoryProvider()),
+        ChangeNotifierProvider(create: (_) => StatProvider()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         ),
-        home: BookContent(),
+        home: HomeScreen(),
       ),
     );
   }
@@ -42,7 +44,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  final int _counter = 0;
 
   void _incrementCounter() {
     setState(() {});

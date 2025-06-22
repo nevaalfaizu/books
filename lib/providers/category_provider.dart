@@ -1,3 +1,4 @@
+// import 'package:books/models/stat_model.dart';
 import 'package:flutter/material.dart';
 import '../models/category_model.dart';
 import '../services/category_service.dart';
@@ -12,6 +13,9 @@ class CategoryProvider with ChangeNotifier {
   Category? get selectedCategory => _selectedCategory;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
+
+  // final List<StatDaily> _stats = [];
+  // List<StatDaily> get stats => _stats;
 
   // Fetch all categories
   Future<void> fetchCategories() async {
@@ -112,4 +116,13 @@ class CategoryProvider with ChangeNotifier {
     _isLoading = false;
     notifyListeners();
   }
+
+  // Future<void> fetchCategoryStats() async {
+  //   try {
+  //     _stats = await CategoryService.getStats();
+  //     notifyListeners();
+  //   } catch (e) {
+  //     print('Error fetching category stats: $e');
+  //   }
+  // }
 }

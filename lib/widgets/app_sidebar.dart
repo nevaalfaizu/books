@@ -1,5 +1,6 @@
 import 'package:books/screens/books/book_content.dart';
 import 'package:books/screens/categories/category_content.dart';
+import 'package:books/screens/home_screen.dart';
 import 'package:books/screens/inventories/inventory_content.dart';
 import 'package:flutter/material.dart';
 // import 'package:books/screens/categories/category_table_page.dart';
@@ -20,6 +21,16 @@ class AppSidebar extends StatelessWidget {
               'Menu Navigasi',
               style: TextStyle(color: Colors.white, fontSize: 24),
             ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.home),
+            title: const Text('Home'),
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const HomeScreen()),
+              );
+            },
           ),
           ListTile(
             leading: const Icon(Icons.book),

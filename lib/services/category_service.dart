@@ -46,4 +46,10 @@ class CategoryService {
   static Future<void> deleteCategory(int id) async {
     await DioClient.dio.delete('/categories/$id');
   }
+
+  // static Future<List<StatDaily>> getStats() async {
+  //   final response = await DioClient.dio.get('/categories/stats');
+  //   final data = response.data as List;
+  //   return data.map((json) => StatDaily.fromJson(json)).toList();
+  // }
 }

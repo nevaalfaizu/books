@@ -3,8 +3,8 @@ import 'package:books/models/inventory_model.dart';
 
 class InventoryService {
   static Future<List<Inventory>> getInventories() async {
-    final Response = await DioClient.dio.get('/inventories');
-    final data = Response.data['data'] as List;
+    final response = await DioClient.dio.get('/inventories');
+    final data = response.data['items'] as List;
     return data.map((item) => Inventory.fromJson(item)).toList();
   }
 
@@ -59,4 +59,10 @@ class InventoryService {
   static Future<void> deleteInventery(int id) async {
     await DioClient.dio.delete('inventory/$id');
   }
+
+  // static Future<List<StatDaily>> getStats() async {
+  //   final response = await DioClient.dio.get('/inventories/stats');
+  //   final data = response.data as List;
+  //   return data.map((json) => StatDaily.fromJson(json)).toList();
+  // }
 }

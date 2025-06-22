@@ -95,7 +95,7 @@ class _BookTablePageState extends State<BookTablePage> {
                               });
                             },
                             columns: const [
-                              DataColumn(label: Text("NO")),
+                              DataColumn(label: Text("No")),
                               DataColumn(label: Text("Judul")),
                               DataColumn(label: Text("Penulis")),
                               DataColumn(label: Text("Tahun")),

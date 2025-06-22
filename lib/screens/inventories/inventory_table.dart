@@ -102,7 +102,7 @@ class _InventoryTablePageState extends State<InventoryTablePage> {
                               DataColumn(label: Text("Aksi")),
                             ],
                             source: _InventoryDataTableSource(
-                              provider.Inventories,
+                              provider.inventories,
                               context,
                             ),
                           ),

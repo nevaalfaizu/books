@@ -1,4 +1,5 @@
 import 'package:books/models/inventory_model.dart';
+// import 'package:books/models/stat_model.dart';
 import 'package:flutter/material.dart';
 
 import '../services/inventory_service.dart';
@@ -8,9 +9,12 @@ class InventoryProvider with ChangeNotifier {
   bool _isLoading = false;
   String? _errorMessage;
 
-  List<Inventory> get Inventories => _inventories;
+  List<Inventory> get inventories => _inventories;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
+
+  // final List<StatDaily> _stats = [];
+  // List<StatDaily> get stats => _stats;
 
   Future<void> fetchInventories() async {
     _isLoading = true;
@@ -33,14 +37,14 @@ class InventoryProvider with ChangeNotifier {
     required int categoryId,
   }) async {
     try {
-      final newBook = await InventoryService.createInventory(
+      final newInventory = await InventoryService.createInventory(
         name: name,
         quantity: quantity,
         price: price,
         year: year,
         categoryId: categoryId,
       );
-      _inventories.add(newBook);
+      _inventories.add(newInventory);
       notifyListeners();
     } catch (e) {
       _errorMessage = e.toString();
@@ -79,7 +83,7 @@ class InventoryProvider with ChangeNotifier {
   Future<void> deleteBook(int id) async {
     try {
       await InventoryService.deleteInventery(id);
-      _inventories.removeWhere((Inventory) => Inventory.id == id);
+      _inventories.removeWhere((inventory) => inventory.id == id);
       notifyListeners();
     } catch (e) {
       _errorMessage = e.toString();
@@ -96,4 +100,13 @@ class InventoryProvider with ChangeNotifier {
       return null;
     }
   }
+
+  // Future<void> fetchInventoryStats() async {
+  //   try {
+  //     _stats = await CategoryService.getStats();
+  //     notifyListeners();
+  //   } catch (e) {
+  //     print('Error fetching category stats: $e');
+  //   }
+  // }
 }
