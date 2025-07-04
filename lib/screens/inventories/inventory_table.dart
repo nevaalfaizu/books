@@ -139,6 +139,12 @@ class _InventoryDataTableSource extends DataTableSource {
           Row(
             children: [
               IconButton(
+                icon: const Icon(Icons.visibility),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/inventory/${inventory.id}');
+                },
+              ),
+              IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () async {
                   final result = await Navigator.push(
@@ -156,6 +162,38 @@ class _InventoryDataTableSource extends DataTableSource {
                       context,
                       listen: false,
                     ).fetchInventories();
+                  }
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () async {
+                  final confirm = await showDialog<bool>(
+                    context: context,
+                    builder:
+                        (context) => AlertDialog(
+                          title: const Text("Konfirmasi Hapus"),
+                          content: Text(
+                            "Yakin ingin menghapus '${inventory.name}'?",
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, false),
+                              child: const Text("Batal"),
+                            ),
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, true),
+                              child: const Text("Hapus"),
+                            ),
+                          ],
+                        ),
+                  );
+
+                  if (confirm == true) {
+                    await Provider.of<InventoryProvider>(
+                      context,
+                      listen: false,
+                    ).deleteInventory(inventory.id);
                   }
                 },
               ),

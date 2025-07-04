@@ -1,5 +1,5 @@
 import 'package:books/screens/inventories/inventory_table.dart';
-import 'package:books/widgets/app_sidebar.dart';
+import 'package:books/utils/layout.dart';
 import 'package:flutter/material.dart';
 
 class InventoryContent extends StatelessWidget {
@@ -7,12 +7,9 @@ class InventoryContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Data Inventory')),
-      drawer: const AppSidebar(onSelectPage: _dummy),
-      body: const InventoryTablePage(), // Ganti dengan isi kategori
+    return DashboardLayout(
+      bodyContent: const InventoryTablePage(),
+      seltitle: 'Inventories',
     );
   }
-
-  static void _dummy(int index) {}
 }

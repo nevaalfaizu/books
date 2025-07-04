@@ -1,5 +1,4 @@
 import 'package:books/models/inventory_model.dart';
-// import 'package:books/models/stat_model.dart';
 import 'package:flutter/material.dart';
 
 import '../services/inventory_service.dart';
@@ -69,7 +68,9 @@ class InventoryProvider with ChangeNotifier {
         year: year,
         categoryId: categoryId,
       );
-      final index = _inventories.indexWhere((Inventory) => Inventory.id == id);
+      final index = _inventories.indexWhere(
+        (Inventory inventory) => inventory.id == id,
+      );
       if (index != -1) {
         _inventories[index] = updatedBook;
       }
@@ -80,9 +81,9 @@ class InventoryProvider with ChangeNotifier {
     }
   }
 
-  Future<void> deleteBook(int id) async {
+  Future<void> deleteInventory(int id) async {
     try {
-      await InventoryService.deleteInventery(id);
+      await InventoryService.deleteInventory(id);
       _inventories.removeWhere((inventory) => inventory.id == id);
       notifyListeners();
     } catch (e) {
@@ -91,7 +92,7 @@ class InventoryProvider with ChangeNotifier {
     }
   }
 
-  Future<Inventory?> getBookById(int id) async {
+  Future<Inventory?> getInventoryById(int id) async {
     try {
       return await InventoryService.getInventoryById(id);
     } catch (e) {

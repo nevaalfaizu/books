@@ -17,6 +17,8 @@ class BookService {
     required String title,
     required String author,
     required int year,
+    required String description,
+    required String? coverImageUrl,
     required int categoryId,
   }) async {
     final response = await DioClient.dio.post(
@@ -25,6 +27,8 @@ class BookService {
         'title': title,
         'author': author,
         'year': year,
+        'description': description,
+        'cover_image_url': coverImageUrl,
         'category_id': categoryId,
       },
     );
@@ -37,6 +41,8 @@ class BookService {
     required String title,
     required String author,
     required int year,
+    required String description,
+    required String? coverImageUrl,
     required int categoryId,
   }) async {
     final response = await DioClient.dio.put(
@@ -45,6 +51,8 @@ class BookService {
         'title': title,
         'author': author,
         'year': year,
+        'description': description,
+        'cover_image_url': coverImageUrl,
         'category_id': categoryId,
       },
     );

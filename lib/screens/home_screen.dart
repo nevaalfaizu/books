@@ -1,7 +1,7 @@
-import 'package:books/widgets/app_sidebar.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:books/utils/layout.dart'; // file layout utama (sidebar + topbar + body)
 import 'package:books/providers/stat_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:books/widgets/stat_chart.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -22,16 +22,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Home')),
-      drawer: Drawer(
-        child: AppSidebar(
-          onSelectPage: (index) {
-            // Handle navigation based on index if needed
-          },
-        ),
-      ),
-      body: Consumer<StatProvider>(
+    return DashboardLayout(
+      seltitle: 'Dashboard',
+      bodyContent: Consumer<StatProvider>(
         builder: (context, provider, _) {
           final stats = provider.stats;
 
@@ -40,40 +33,36 @@ class _HomeScreenState extends State<HomeScreen> {
           }
 
           return SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+
             child: Column(
               children: [
-                // Total cards
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _buildTotalCard(
-                        context: context,
-                        title: 'Books',
-                        total: stats.totalBooks,
-                        color: Colors.blue,
-                        routeName: '/books',
-                      ),
-                      _buildTotalCard(
-                        context: context,
-                        title: 'Inventories',
-                        total: stats.totalInventories,
-                        color: Colors.green,
-                        routeName: '/inventories',
-                      ),
-                      _buildTotalCard(
-                        context: context,
-                        title: 'Categories',
-                        total: stats.totalCategories,
-                        color: Colors.red,
-                        routeName: '/categories',
-                      ),
-                    ],
-                  ),
+                SizedBox(height: 16),
+                Row(
+                  children: [
+                    _buildTotalCard(
+                      title: 'Books',
+                      total: stats.totalBooks,
+                      color: Colors.blue,
+                      routeName: '/books',
+                    ),
+                    const SizedBox(width: 8),
+                    _buildTotalCard(
+                      title: 'Inventories',
+                      total: stats.totalInventories,
+                      color: Colors.green,
+                      routeName: '/inventories',
+                    ),
+                    const SizedBox(width: 8),
+                    _buildTotalCard(
+                      title: 'Categories',
+                      total: stats.totalCategories,
+                      color: Colors.red,
+                      routeName: '/categories',
+                    ),
+                  ],
                 ),
-
-                // Charts
+                const SizedBox(height: 16),
                 StatChart(
                   data: stats.bookDaily,
                   title: 'Books',
@@ -101,7 +90,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildTotalCard({
-    required BuildContext context,
     required String title,
     required int total,
     required Color color,
@@ -113,7 +101,6 @@ class _HomeScreenState extends State<HomeScreen> {
           Navigator.pushNamed(context, routeName);
         },
         child: Card(
-          color: color.withOpacity(0.1),
           elevation: 2,
           child: Padding(
             padding: const EdgeInsets.all(12),

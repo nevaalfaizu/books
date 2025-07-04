@@ -1,0 +1,96 @@
+import 'package:flutter/material.dart';
+import 'package:books/models/books_model.dart';
+
+class BookDetailPage extends StatelessWidget {
+  final Book book;
+
+  const BookDetailPage({super.key, required this.book});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Detail Buku'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.blue[50],
+            borderRadius: BorderRadius.circular(8),
+          ),
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Text(
+                  book.title,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // SAMPUL
+                  Container(
+                    width: 120,
+                    height: 180,
+                    color: Colors.grey[300],
+                    child: (book.coverImageUrl != null && book.coverImageUrl!.isNotEmpty)
+                        ? Image.network(
+                            book.coverImageUrl!,
+                            fit: BoxFit.cover,
+                          )
+                        : const Center(child: Text('SAMPUL')),
+                  ),
+                  const SizedBox(width: 16),
+                  // INFO
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Penulis: ${book.author}',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                'Tahun: ${book.year}',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          book.description,
+                          textAlign: TextAlign.justify,
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

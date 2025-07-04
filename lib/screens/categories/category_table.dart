@@ -130,6 +130,12 @@ class _CategoryDataTableSource extends DataTableSource {
           Row(
             children: [
               IconButton(
+                icon: const Icon(Icons.visibility),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/category/${category.id}');
+                },
+              ),
+              IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () async {
                   final result = await Navigator.push(

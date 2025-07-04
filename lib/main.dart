@@ -1,3 +1,7 @@
+import 'package:books/auth/login_page.dart';
+import 'package:books/auth/register_page.dart';
+import 'package:books/auth/reset_password_page.dart';
+import 'package:books/providers/auth_provider.dart';
 import 'package:books/providers/book_provider.dart';
 import 'package:books/providers/category_provider.dart';
 import 'package:books/providers/inventory_provider.dart';
@@ -23,12 +27,19 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CategoryProvider()),
         ChangeNotifierProvider(create: (_) => InventoryProvider()),
         ChangeNotifierProvider(create: (_) => StatProvider()),
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         ),
+        initialRoute: '/login',
+        routes: {
+          '/login': (context) => const LoginPage(),
+          '/register': (context) => const RegisterPage(),
+          '/reset': (context) => const ResetPasswordPage(),
+        },
         home: HomeScreen(),
       ),
     );

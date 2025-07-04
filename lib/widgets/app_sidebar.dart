@@ -3,67 +3,81 @@ import 'package:books/screens/categories/category_content.dart';
 import 'package:books/screens/home_screen.dart';
 import 'package:books/screens/inventories/inventory_content.dart';
 import 'package:flutter/material.dart';
-// import 'package:books/screens/categories/category_table_page.dart';
-// import 'package:books/screens/inventories/inventory_table_page.dart';
 
 class AppSidebar extends StatelessWidget {
-  const AppSidebar({super.key, required void Function(int index) onSelectPage});
+  final String selectedPageTitle;
+  const AppSidebar({super.key, required this.selectedPageTitle});
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          const DrawerHeader(
-            decoration: BoxDecoration(color: Colors.blue),
-            child: Text(
-              'Menu Navigasi',
-              style: TextStyle(color: Colors.white, fontSize: 24),
-            ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.home),
-            title: const Text('Home'),
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const HomeScreen()),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.book),
-            title: const Text('Books'),
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const BookContent()),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.category),
-            title: const Text('Categories'),
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const CategoryContent()),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.inventory),
-            title: const Text('Inventories'),
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const InventoryContent()),
-              );
-            },
-          ),
-        ],
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.horizontal(right: Radius.circular(0)),
       ),
+      child: Container(
+        color: const Color.fromARGB(255, 218, 216, 216),
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 221, 221, 221),
+              ),
+              child: Center(
+                child: Text(
+                  selectedPageTitle,
+                  style: TextStyle(color: Colors.black, fontSize: 24),
+                ),
+              ),
+            ),
+            _buildMenuItem(Icons.dashboard, 'Dashboard', context, () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => HomeScreen()),
+              );
+            }),
+            _buildMenuItem(Icons.book, 'Books', context, () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => BookContent()),
+              );
+            }),
+            _buildMenuItem(Icons.inventory, 'Inventories', context, () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => InventoryContent()),
+              );
+            }),
+            _buildMenuItem(Icons.category, 'Categories', context, () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => CategoryContent()),
+              );
+            }),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMenuItem(
+    IconData icon,
+    String title,
+    BuildContext context,
+    VoidCallback onTap,
+  ) {
+    return ListTile(
+      leading: Icon(icon, color: Colors.black),
+      title: Text(
+        title,
+        style: TextStyle(
+          color: selectedPageTitle == title ? Colors.grey : Colors.black,
+        ),
+      ),
+      onTap: () {
+        Navigator.pop(context); // Tutup drawer
+        onTap();
+      },
     );
   }
 }

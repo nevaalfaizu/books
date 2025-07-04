@@ -5,6 +5,9 @@ class Book {
   final String title;
   final String author;
   final int year;
+  final String description;
+  final String? coverImageUrl;
+
   final int categoryId;
   final Category category;
 
@@ -13,6 +16,8 @@ class Book {
     required this.title,
     required this.author,
     required this.year,
+    required this.description,
+    required this.coverImageUrl,
     required this.categoryId,
     required this.category,
   });
@@ -23,6 +28,8 @@ class Book {
       title: json['title'],
       author: json['author'],
       year: json['year'],
+      description: json['description'],
+      coverImageUrl: json['cover_image_url'],
       categoryId: json['category_id'],
       category: Category.fromJson(json['category'] ?? {}),
     );

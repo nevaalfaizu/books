@@ -1,4 +1,5 @@
 import 'package:books/providers/book_provider.dart';
+import 'package:books/screens/books/book_details,dart';
 import 'package:books/screens/books/book_form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -99,6 +100,8 @@ class _BookTablePageState extends State<BookTablePage> {
                               DataColumn(label: Text("Judul")),
                               DataColumn(label: Text("Penulis")),
                               DataColumn(label: Text("Tahun")),
+                              DataColumn(label: Text("Deskripsi")),
+                              DataColumn(label: Text("Gambar")),
                               DataColumn(label: Text("Kategori")),
                               DataColumn(label: Text("Aksi")),
                             ],
@@ -135,6 +138,18 @@ class _BookDataTableSource extends DataTableSource {
         DataCell(Text(book.title)),
         DataCell(Text(book.author)),
         DataCell(Text(book.year.toString())),
+        DataCell(Text(book.description)),
+        DataCell(
+          ((book.coverImageUrl ?? '').isNotEmpty)
+              ? Image.network(
+                book.coverImageUrl!,
+                width: 50,
+                height: 75,
+                fit: BoxFit.cover,
+              )
+              : const Text('Tidak ada gambar'),
+        ),
+
         DataCell(Text(book.category.name)),
         DataCell(
           Row(
@@ -142,7 +157,12 @@ class _BookDataTableSource extends DataTableSource {
               IconButton(
                 icon: const Icon(Icons.visibility),
                 onPressed: () {
-                  Navigator.pushNamed(context, '/book/${book.id}');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BookDetailPage(book: book),
+                    ),
+                  );
                 },
               ),
               IconButton(

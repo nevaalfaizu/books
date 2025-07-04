@@ -1,4 +1,5 @@
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../models/stat_model.dart';
 
@@ -27,30 +28,53 @@ class StatChart extends StatelessWidget {
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           AspectRatio(
-            aspectRatio: 1.7,
+            aspectRatio: 4,
             child: LineChart(
               LineChartData(
                 gridData: const FlGridData(show: true),
                 titlesData: FlTitlesData(
-                  leftTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: true),
-                  ),
                   bottomTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
+                      interval: 1,
                       getTitlesWidget: (value, meta) {
-                        int index = value.toInt();
+                        int index = value.round();
                         if (index >= 0 && index < data.length) {
                           final date = data[index].date.substring(5, 10);
-                          return Text(
-                            date,
-                            style: const TextStyle(fontSize: 10),
+                          return SideTitleWidget(
+                            space: 4,
+                            meta: meta,
+                            child: Text(
+                              date,
+                              style: const TextStyle(fontSize: 10),
+                            ),
                           );
                         }
-                        return const Text('');
+                        return const SizedBox.shrink();
                       },
-                      interval: 1,
                     ),
+                  ),
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      interval: 1,
+                      getTitlesWidget: (value, meta) {
+                        return SideTitleWidget(
+                          meta: meta,
+                          space: 4,
+                          child: Text(
+                            value.toInt().toString(),
+                            style: const TextStyle(fontSize: 10),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  topTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  rightTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
                   ),
                 ),
                 borderData: FlBorderData(show: true),
@@ -61,7 +85,7 @@ class StatChart extends StatelessWidget {
                   LineChartBarData(
                     isCurved: true,
                     color: color,
-                    barWidth: 4,
+                    barWidth: 2,
                     dotData: const FlDotData(show: true),
                     spots: List.generate(
                       data.length,

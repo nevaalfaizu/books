@@ -32,6 +32,8 @@ class BookProvider with ChangeNotifier {
     required String title,
     required String author,
     required int year,
+    required String description,
+    required String? coverImageUrl,
     required int categoryId,
   }) async {
     try {
@@ -39,6 +41,8 @@ class BookProvider with ChangeNotifier {
         title: title,
         author: author,
         year: year,
+        description: description,
+        coverImageUrl: coverImageUrl,
         categoryId: categoryId,
       );
       _books.add(newBook);
@@ -54,6 +58,8 @@ class BookProvider with ChangeNotifier {
     required String title,
     required String author,
     required int year,
+    required String description,
+    required String? coverImageUrl,
     required int categoryId,
   }) async {
     try {
@@ -62,6 +68,8 @@ class BookProvider with ChangeNotifier {
         title: title,
         author: author,
         year: year,
+        description: description,
+        coverImageUrl: coverImageUrl,
         categoryId: categoryId,
       );
       final index = _books.indexWhere((book) => book.id == id);

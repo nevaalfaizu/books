@@ -1,5 +1,5 @@
 // category_content.dart
-import 'package:books/widgets/app_sidebar.dart';
+import 'package:books/utils/layout.dart';
 import 'package:flutter/material.dart';
 import 'category_table.dart';
 
@@ -8,12 +8,9 @@ class CategoryContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Data Kategori')),
-      drawer: const AppSidebar(onSelectPage: _dummy), // Tambahkan sidebar
-      body: const CategoryTablePage(),
+    return DashboardLayout(
+      bodyContent: const CategoryTablePage(),
+      seltitle: 'Categories',
     );
   }
-
-  static void _dummy(int index) {} // Placeholder, bisa dihilangkan
 }

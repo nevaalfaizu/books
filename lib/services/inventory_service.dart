@@ -56,8 +56,8 @@ class InventoryService {
     return Inventory.fromJson(response.data['inventory']);
   }
 
-  static Future<void> deleteInventery(int id) async {
-    await DioClient.dio.delete('inventory/$id');
+  static Future<void> deleteInventory(int id) async {
+    await DioClient.dio.delete('inventories/$id');
   }
 
   // static Future<List<StatDaily>> getStats() async {
